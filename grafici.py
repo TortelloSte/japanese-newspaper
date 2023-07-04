@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 def apertura_file():
     lista_file = os.listdir('./data')
@@ -19,8 +21,8 @@ def apertura_file():
             selezionato = csv_files[int(selezione) - 1]
             file_path = os.path.join('./data', selezionato)
             try:
-                df = pd.read_csv(file_path, sep='\t')  # Lettura del file CSV
-                return df  # Restituisce il dataframe
+                df = pd.read_csv(file_path, sep='\t') 
+                return df  
             except pd.errors.ParserError as e:
                 print("Errore di lettura:", str(e))
             except pd.errors.EmptyDataError as e:
@@ -30,7 +32,31 @@ def apertura_file():
         else:
             print("Numero di file non valido. Riprova!")
 
-# Esempio di utilizzo
-df = apertura_file()
 
-print(df.head())
+df = apertura_file()
+# mentre facevo le analisi ho pensato che potessero eserci dei duplicati quindi li controllo e nel caso rimuovo
+
+
+def verifica_duplicati(df):
+    duplicati = df.duplicated(subset=['text'], keep=False)
+    if duplicati.any():
+        print("Elementi duplicati")
+        print(df[duplicati]['text'])
+    else:
+        print("No duplicati")
+
+if df is not None:
+    verifica_duplicati(df)
+
+def rimuovi_duplicati(df):
+    df_senza_duplicati = df.drop_duplicates(subset=['text'], keep='first')
+    return df_senza_duplicati
+
+if df is not None:
+    df_senza_duplicati = rimuovi_duplicati(df)
+
+print(df_senza_duplicati)
+
+# ora vado a fare il grafico della colonna source prendendo i valori unici per vedere come sono i dati, e in quali quantita!
+
+# da qui svolgerò le analisi solamente nel dataset japanese visto che in quello inglese ci sono solamente due case editrici con un dislivello enorme e quindi non ci sarebbe nulla da testare
