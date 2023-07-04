@@ -59,9 +59,44 @@ def analisi_dati(df):
     lunghezza_righe = len(df)
     print(lunghezza_righe)
 
+    def verifica_duplicati(df):
+        duplicati = df.duplicated(subset=['text'], keep=False)
+        if duplicati.any():
+            print("Elementi duplicati")
+            print(df[duplicati]['text'])
+        else:
+            pass
+
+    if df is not None:
+        verifica_duplicati(df)
+
+    def rimuovi_duplicati(df):
+        df = df.drop_duplicates(subset=['text'], keep='first')
+        return df
+
+    if df is not None:
+        df = rimuovi_duplicati(df)
+
+    
+
+    def analisi_per_ML(df):
+
+        if not os.path.exists('grafici'):
+            os.makedirs('grafici')
+        
+        conteggi = df['source'].value_counts().reset_index()
+        conteggi.columns = ['Giornale', 'Conteggi']
+        conteggi_file_path = 'grafici/conteggi_source.txt'
+        conteggi.to_csv(conteggi_file_path, sep='\t', index=False)
+
+
+    if df is not None:
+        analisi_per_ML(df)
+
+
     if not os.path.exists('./data'):
         os.makedirs('./data')
-    
+
     scelta = input("Vuoi salvare il dataset? (s/n): ")
     if scelta.lower() == "s":
         lingua = input("Inserisci la lingua (English/Japanese): ")

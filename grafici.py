@@ -1,62 +1,40 @@
-import os
 import pandas as pd
+import os
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
-def apertura_file():
-    lista_file = os.listdir('./data')
-    csv_files = [file for file in lista_file if file.endswith('.csv')]
+df = pd.read_csv('./data/japanese_news.csv', sep= '\t')
+# print(df.head())
 
-    print("File presenti:")
-    for i, file in enumerate(csv_files, start=1):
-        print(f"{i}. {file}")
+df = df.drop(['title', 'author'], axis = 1)
+print(df.head())
 
-    while True:
-        selezione = input("Inserisci il numero del file da aprire (q per uscire): ")
+if not os.path.exists('grafici'):
+    os.makedirs('grafici')
+# grafico 1 
 
-        if selezione.lower() == 'q':
-            return None
+df['year'] = pd.to_datetime(df['date']).dt.year
 
-        if selezione.isdigit() and int(selezione) <= len(csv_files):
-            selezionato = csv_files[int(selezione) - 1]
-            file_path = os.path.join('./data', selezionato)
-            try:
-                df = pd.read_csv(file_path, sep='\t') 
-                return df  
-            except pd.errors.ParserError as e:
-                print("Errore di lettura:", str(e))
-            except pd.errors.EmptyDataError as e:
-                print("Dataset vuoto:", str(e))
-            except FileNotFoundError as e:
-                print("File non trovato nella cartella:", str(e))
-        else:
-            print("Numero di file non valido. Riprova!")
+articles_per_year = df['year'].value_counts().sort_index()
 
+plt.figure(figsize=(12, 8))
+sns.barplot(x=articles_per_year.index, y=articles_per_year.values, color='skyblue')
+plt.xlabel('Anno') # divisione per anni
+plt.ylabel('Numero di articoli')
+plt.title('Distribuzione degli articoli per anno')
 
-df = apertura_file()
-# mentre facevo le analisi ho pensato che potessero eserci dei duplicati quindi li controllo e nel caso rimuovo
+plt.savefig('grafici/distribuzione_articoli_anno.png')
+plt.close()
 
+# grafico 2
+articles_per_source = df['source'].value_counts()
 
-def verifica_duplicati(df):
-    duplicati = df.duplicated(subset=['text'], keep=False)
-    if duplicati.any():
-        print("Elementi duplicati")
-        print(df[duplicati]['text'])
-    else:
-        print("No duplicati")
-
-if df is not None:
-    verifica_duplicati(df)
-
-def rimuovi_duplicati(df):
-    df_senza_duplicati = df.drop_duplicates(subset=['text'], keep='first')
-    return df_senza_duplicati
-
-if df is not None:
-    df_senza_duplicati = rimuovi_duplicati(df)
-
-print(df_senza_duplicati)
-
-# ora vado a fare il grafico della colonna source prendendo i valori unici per vedere come sono i dati, e in quali quantita!
-
-# da qui svolgerò le analisi solamente nel dataset japanese visto che in quello inglese ci sono solamente due case editrici con un dislivello enorme e quindi non ci sarebbe nulla da testare
+plt.figure(figsize=(12, 8))
+sns.barplot(x=articles_per_source.index, y=articles_per_source.values, color='skyblue')
+plt.xlabel('Fonte')
+plt.ylabel('Numero di articoli')
+plt.title('Numero di articoli per fonte')
+plt.xticks(rotation=45)
+plt.savefig('grafici/numero_articoli_fonte.png')
+plt.close()

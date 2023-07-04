@@ -12,15 +12,18 @@ I file che utilizzo per questa analisi e lo studio sono due, uno si chiama engli
 
 Per far funzionare il codice serve importare nella propria macchina i seguenti pacchetti di python con pip
 Aprire il prompt dei comandi > scrivere pip install os, sys, matplotlib, seaborn, pandas
-    
+
+**Le analisi sono svolte solamente sul dataset Japanese_news.py visto che è l'unico con i dati che permettono vere analisi e applicazioni di ML**
 # main.py
 
-All'interno del file ho sviluppato una funzione che serve per leggere uno dei due dataset, questa semplice funzione permette la scelta di uno dei due dataset da analizzare, controlla che sia leggibile e invia in output il file, che viene estratto e inserito all'interno di una funzione decoratrice : @lista_data
-* ho aggiunto un controllo approfondito sugli errori che potrebbero esserci nella lettura del dataset*
-Questo permette di applicare questa funzione all'interno di una funzione esterna ossia: analisi_dati dove viene eseguita una analisi dettagliata dei dati presenti all'interno del dataset scelto. Il file viene dunque salvato nuovamente con tutti i dati che sono stati modificati.
+All'interno di questo file sono state fatte tutte le operazioni che portano ad avere il dataset pulito per i processi di analisi con il ML.
+Il procedimento è molto facile, visto che ho fatto in modo che sia chiaro, e soprattutto il terminale giuida l'utente alle procedure da eseguire per poi passare al codice seguente grafici.py
 
-# grafici.py
+# I grafici
+Grafici maggiormente interessanti:
+    migliore distribuzione nell'anno degli articoli
+    grafico con chi ha fatto più articoli
 
-Nel codice vengono presi i nuovi dataset e andiamo a creare i grafici su misura.
-Ho scelto di dividere i codici cosi da non avere tante righe di codice dentro lo stesso file
+Sono stati sviluppati i grafici su questi due fattori cosi da mostrare un po le distribusioni
 
+# ML.py
