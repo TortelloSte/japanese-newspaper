@@ -36,6 +36,8 @@ def lista_data(funzione):
     return decoratore # ora applico il decoratore sulla funzione che mi fa le analisi sul dataset che si seleziona
 
 
+
+
 @lista_data
 def analisi_dati(df):
      # print(df.head()) #
